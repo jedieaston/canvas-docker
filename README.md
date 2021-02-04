@@ -1,6 +1,3 @@
-[![](https://images.microbadger.com/badges/image/lbjay/canvas-docker.svg)](http://microbadger.com/images/lbjay/canvas-docker "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/lbjay/canvas-docker.svg)](http://microbadger.com/images/lbjay/canvas-docker "Get your own version badge on microbadger.com")
-
 # canvas-docker
 
 ## Overview
@@ -15,7 +12,7 @@
 
 `docker run --name canvas-docker -p 3000:3000 -d lbjay/canvas-docker`
 
-This repo is [registered](https://registry.hub.docker.com/u/lbjay/canvas-docker/) at Docker Hub as an automated build. So you should also be able to `docker pull lbjay/canvas-docker` to get the pre-built image.
+This repo is [registered](https://registry.hub.docker.com/u/lbjay/canvas-docker/) at Docker Hub as an automated build. So you should also be able to `docker pull jedieaston/canvas-docker` to get the pre-built image.
 
 ## Building
 
@@ -75,10 +72,11 @@ docker run -d --name=canvas -p 3000:3000 -e EMAIL_DELIVERY_METHOD=smtp -e SMTP_A
 
 * Jay Luker - [lbjay](https://github.com/lbjay)
 
+
 ## License
 
 Apache 2.0
 
 ## Copyright
 
-2016 President and Fellows of Harvard College
+???

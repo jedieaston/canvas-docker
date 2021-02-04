@@ -1,6 +1,5 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 
-MAINTAINER Ethan w<ewang@apache.org>
 
 ARG REVISION=master
 ENV RAILS_ENV development
@@ -10,21 +9,21 @@ ENV YARN_VERSION 1.5.1
 # add nodejs and recommended ruby repos
 RUN apt-get update \
     && apt-get -y install curl software-properties-common \
-    && add-apt-repository -y ppa:brightbox/ruby-ng \
+    # && add-apt-repository -y ppa:brightbox/ruby-ng-experimental \
     && apt-get update \
-    && apt-get install -y ruby2.4 ruby2.4-dev supervisor redis-server \
+    && apt-get install -y ruby2.7 ruby2.7-dev supervisor redis-server \
         zlib1g-dev libxml2-dev libxslt1-dev libsqlite3-dev postgresql \
         postgresql-contrib libpq-dev libxmlsec1-dev curl make g++ git \
         unzip fontforge libicu-dev
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash \
+RUN curl -sL https://deb.nodesource.com/setup_15.x | bash \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         nodejs \
         yarn \
-        unzip \
+        unzip python2 \
         fontforge
 
 RUN apt-get clean && rm -Rf /var/cache/apt
@@ -37,7 +36,7 @@ ENV LC_ALL en_US.UTF-8
 
 RUN groupadd -r canvasuser -g 433 && \
     adduser --uid 431 --system --gid 433 --home /opt/canvas canvasuser && \
-    adduser canvasuser sudo && \
+    adduser canvasuser sudo && mkdir /opt/canvas/.gems \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN if [ -e /var/lib/gems/$RUBY_MAJOR.0/gems/bundler-* ]; then BUNDLER_INSTALL="-i /var/lib/gems/$RUBY_MAJOR.0"; fi \
@@ -52,11 +51,11 @@ COPY assets/start.sh /opt/canvas/start.sh
 RUN chmod 755 /opt/canvas/*.sh
 
 COPY assets/supervisord.conf /etc/supervisor/supervisord.conf
-COPY assets/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
-RUN sed -i "/^#listen_addresses/i listen_addresses='*'" /etc/postgresql/9.5/main/postgresql.conf
+COPY assets/pg_hba.conf /etc/postgresql/12/main/pg_hba.conf
+RUN sed -i "/^#listen_addresses/i listen_addresses='*'" /etc/postgresql/12/main/postgresql.conf
 
 RUN cd /opt/canvas \
-    && git clone https://github.com/aertoria/canvas-lms.git \
+    && git clone --depth 1 https://github.com/Instructure/canvas-lms.git \
     && cd canvas-lms \
     && git checkout $REVISION
 
