@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: jedieaston/canvas-docker
-          platforms: arm64v8, amd64 
+          platforms: arm64, amd64 
           tag_with_ref: true
 
 
